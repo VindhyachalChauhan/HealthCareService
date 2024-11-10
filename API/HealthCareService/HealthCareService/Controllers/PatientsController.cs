@@ -1,0 +1,55 @@
+﻿using HealthCareService.Data;
+using HealthCareService.Models.Domain;
+using HealthCareService.Models.DTO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace HealthCareService.Controllers
+{   // https://localhost : XXXX/api/categories
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PatientsController : ControllerBase
+    {
+        private readonly ApplicationDbContext dbContext;
+
+        public PatientsController(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult>RegisterPatient(RegisterPatientRequestDto request)
+        {
+            // Map DTO to Domain Model
+            var patient = new Patient
+            {
+                patient_name= request.patient_name,
+                patient_email=request.patient_email,
+                patient_dob=request.patient_dob,
+                patient_gender=request.patient_gender,
+                patient_mobile=request.patient_mobile,
+                registeredDate=request.registeredDate                
+            };
+
+            await dbContext.Patients.AddAsync(patient);
+            await dbContext.SaveChangesAsync();
+
+
+            //Domain model to DTO
+            var response = new PatientDto
+            {
+                Id = patient.Id,
+                patient_dob = patient.patient_dob,
+                patient_gender = patient.patient_gender,
+                patient_mobile = patient.patient_mobile,
+                registeredDate = patient.registeredDate,
+                patient_email = patient.patient_email,
+                patient_name = patient.patient_name
+
+            };
+
+            return Ok(response);
+
+        }
+    }
+}
