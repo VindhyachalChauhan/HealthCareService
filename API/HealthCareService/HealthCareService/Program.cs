@@ -1,4 +1,6 @@
 using HealthCareService.Data;
+using HealthCareService.Repositories.Implementation;
+using HealthCareService.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("HealthCareServiceConnectionStrings"));
 });
+
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 
 var app = builder.Build();
 

@@ -1,6 +1,7 @@
 ﻿using HealthCareService.Data;
 using HealthCareService.Models.Domain;
 using HealthCareService.Models.DTO;
+using HealthCareService.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,11 @@ namespace HealthCareService.Controllers
     [ApiController]
     public class PatientsController : ControllerBase
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly IPatientRepository patientRepository;
 
-        public PatientsController(ApplicationDbContext dbContext)
+        public PatientsController(IPatientRepository patientRepository)
         {
-            this.dbContext = dbContext;
+            this.patientRepository = patientRepository;
         }
 
         [HttpPost]
@@ -32,9 +33,7 @@ namespace HealthCareService.Controllers
                 registeredDate=request.registeredDate                
             };
 
-            await dbContext.Patients.AddAsync(patient);
-            await dbContext.SaveChangesAsync();
-
+            await patientRepository.CreateAsync(patient);   
 
             //Domain model to DTO
             var response = new PatientDto
