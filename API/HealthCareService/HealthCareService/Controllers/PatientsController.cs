@@ -23,6 +23,7 @@ namespace HealthCareService.Controllers
             // Map DTO to Domain Model
             var patient = new Patient
             {
+                Id = request.Id,
                 patient_name= request.patient_name,
                 patient_email=request.patient_email,
                 patient_dob=request.patient_dob,
