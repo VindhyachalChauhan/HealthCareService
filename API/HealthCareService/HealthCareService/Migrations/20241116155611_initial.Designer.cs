@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthCareService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241110151757_Add primary key to Patient")]
-    partial class AddprimarykeytoPatient
+    [Migration("20241116155611_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,8 +56,9 @@ namespace HealthCareService.Migrations
 
             modelBuilder.Entity("HealthCareService.Models.Domain.Appointment", b =>
                 {
-                    b.Property<string>("bookingId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("bookingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("bookingTime")
                         .HasColumnType("datetime2");
@@ -66,9 +67,8 @@ namespace HealthCareService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("patientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("patientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("priority")
                         .IsRequired()
@@ -84,8 +84,9 @@ namespace HealthCareService.Migrations
 
             modelBuilder.Entity("HealthCareService.Models.Domain.Patient", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("patient_dob")
                         .IsRequired()

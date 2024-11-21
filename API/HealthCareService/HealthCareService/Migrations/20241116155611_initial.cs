@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HealthCareService.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmigration : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,12 +15,12 @@ namespace HealthCareService.Migrations
                 name: "Appointments",
                 columns: table => new
                 {
-                    bookingId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    bookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     disease = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     tentativeDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     priority = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     bookingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    patientId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    patientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,7 +31,7 @@ namespace HealthCareService.Migrations
                 name: "Patients",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     patient_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     patient_email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     patient_gender = table.Column<string>(type: "nvarchar(max)", nullable: false),

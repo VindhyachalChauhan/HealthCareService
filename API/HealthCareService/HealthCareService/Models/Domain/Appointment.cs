@@ -7,7 +7,7 @@ namespace HealthCareService.Models.Domain
     public class Appointment
     {
         [Key]
-        public string bookingId { get; set; }
+        public Guid bookingId { get; set; }
         [Required]
         public string disease { get; set; }
         [Required]
@@ -21,7 +21,7 @@ namespace HealthCareService.Models.Domain
         // [Required]
         // public string description{get;set;}
         [Required]
-        public string patientId { get; set; }
+        public Guid patientId { get; set; }
 
 
     }

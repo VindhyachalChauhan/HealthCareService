@@ -51,10 +51,11 @@ namespace HealthCareService.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("HealthCareService.Models.Appointment", b =>
+            modelBuilder.Entity("HealthCareService.Models.Domain.Appointment", b =>
                 {
-                    b.Property<string>("bookingId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("bookingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("bookingTime")
                         .HasColumnType("datetime2");
@@ -63,9 +64,8 @@ namespace HealthCareService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("patientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("patientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("priority")
                         .IsRequired()
@@ -79,10 +79,11 @@ namespace HealthCareService.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("HealthCareService.Models.Patient", b =>
+            modelBuilder.Entity("HealthCareService.Models.Domain.Patient", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("patient_dob")
                         .IsRequired()

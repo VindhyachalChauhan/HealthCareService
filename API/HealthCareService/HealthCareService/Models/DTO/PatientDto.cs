@@ -2,7 +2,7 @@
 {
     public class PatientDto
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string patient_name { get; set; }
         public string patient_email { get; set; }
         public string patient_gender { get; set; }
