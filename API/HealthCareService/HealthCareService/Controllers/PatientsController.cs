@@ -30,7 +30,7 @@ namespace HealthCareService.Controllers
                 patient_dob=request.patient_dob,
                 patient_gender=request.patient_gender,
                 patient_mobile=request.patient_mobile,
-               // registeredDate=request.registeredDate                
+                registeredDate=DateTime.Now            
             };
 
             await patientRepository.CreateAsync(patient);   
@@ -50,6 +50,30 @@ namespace HealthCareService.Controllers
 
             return Ok(response);
 
+        }
+
+        //GET /api/categories
+        [HttpGet]
+        public async Task<IActionResult> GetAllPatients()
+        {
+            var patients=await patientRepository.GetAllAsync();
+
+            //Map domain model to DTO
+            var response = new List<PatientDto>();
+            foreach (var patient in patients)
+            {
+                response.Add(new PatientDto
+                {
+                    Id= patient.Id,
+                    patient_name= patient.patient_name,
+                    patient_dob=patient.patient_dob,
+                    patient_email=patient.patient_email,
+                    patient_gender=patient.patient_gender,
+                    patient_mobile=patient.patient_mobile,
+                    registeredDate=patient.registeredDate,
+                });
+            }
+            return Ok(response);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using HealthCareService.Data;
 using HealthCareService.Models.Domain;
 using HealthCareService.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace HealthCareService.Repositories.Implementation
 {
@@ -19,6 +20,11 @@ namespace HealthCareService.Repositories.Implementation
 
             return patient;
 
+        }
+
+        public async Task<IEnumerable<Patient>> GetAllAsync()
+        {
+            return await dbContext.Patients.ToListAsync();
         }
     }
 }
