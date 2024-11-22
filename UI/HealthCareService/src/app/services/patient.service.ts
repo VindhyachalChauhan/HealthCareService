@@ -17,7 +17,7 @@ export class PatientService {
     // should return response from server if patientDetails added successfully
 
     // handle error
-
+      console.log("PatientService",patientDetails)
     return this.http.post<void>(this.API_URL+"/Patients/",patientDetails).pipe(catchError(this.handleError));
   }
   private handleError(error:HttpErrorResponse){

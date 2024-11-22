@@ -30,7 +30,7 @@ namespace HealthCareService.Controllers
                 patient_dob=request.patient_dob,
                 patient_gender=request.patient_gender,
                 patient_mobile=request.patient_mobile,
-                registeredDate=request.registeredDate                
+               // registeredDate=request.registeredDate                
             };
 
             await patientRepository.CreateAsync(patient);   

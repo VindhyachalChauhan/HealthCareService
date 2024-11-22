@@ -57,7 +57,8 @@ export class FormComponent implements OnInit {
       'dob' : [null],
       'mobile' : [''],
       'email' : ['']
-    })
+    });
+ //   this.patientDetails = new Patient('', '', '', new Date(), '', '', '', new Date()); // Initialize the patient model
   }
 
   submitForm(value: any){
@@ -65,7 +66,18 @@ export class FormComponent implements OnInit {
     // should reister new patient using service
        // fields that need to be added: patient_name, patient_gender, patient_dob, patient_mobile, patient_email
     // if added successfully should redirect to 'patientList' page
-    this.patientDetails=this.complexForm.value
+    this.patientDetails=this.complexForm.value as Patient
+    this.patientDetails={
+      patient_name:this.complexForm.get('name')?.value,
+      patient_gender:this.complexForm.get('gender')?.value,
+      patient_dob:this.complexForm.get('dob')?.value,
+      patient_email:this.complexForm.get('email')?.value,
+      patient_mobile:this.complexForm.get('mobile')?.value,
+    //  id:'a'
+      
+      // patient_dob:this.complexForm.get('dob'),
+    }
+    console.log(this.patientDetails)
     this.patientService.registerPatient(this.patientDetails)
     .subscribe({
       next:(response)=>{
