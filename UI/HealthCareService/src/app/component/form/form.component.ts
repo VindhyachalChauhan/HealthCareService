@@ -8,12 +8,13 @@
 // export class FormComponent {
 
 // }
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder,Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Patient } from 'src/app/models/patient';
 import { PatientService } from 'src/app/services/patient.service';
+import { Subscription } from 'rxjs';
 
 // import * as alertify from 'alertify.js';
 
@@ -23,10 +24,11 @@ import { PatientService } from 'src/app/services/patient.service';
   styleUrls: ['./form.component.css'],
   providers: [DatePipe]
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit,OnDestroy {
 
   complexForm: FormGroup;
   patientDetails = new Patient;
+  private patientSubscription?:Subscription
   result: any;
 
   today:any;
@@ -61,12 +63,13 @@ export class FormComponent implements OnInit {
  //   this.patientDetails = new Patient('', '', '', new Date(), '', '', '', new Date()); // Initialize the patient model
   }
 
+
   submitForm(value: any){
 
     // should reister new patient using service
        // fields that need to be added: patient_name, patient_gender, patient_dob, patient_mobile, patient_email
     // if added successfully should redirect to 'patientList' page
-    this.patientDetails=this.complexForm.value as Patient
+   // this.patientDetails=this.complexForm.value as Patient
     this.patientDetails={
       patient_name:this.complexForm.get('name')?.value,
       patient_gender:this.complexForm.get('gender')?.value,
@@ -77,8 +80,8 @@ export class FormComponent implements OnInit {
       
       // patient_dob:this.complexForm.get('dob'),
     }
-    console.log(this.patientDetails)
-    this.patientService.registerPatient(this.patientDetails)
+   // console.log(this.patientDetails)
+   this.patientSubscription= this.patientService.registerPatient(this.patientDetails)
     .subscribe({
       next:(response)=>{
         console.log(this.patientDetails)
@@ -86,6 +89,9 @@ export class FormComponent implements OnInit {
       }
     })
 
+  }
+  ngOnDestroy(): void {
+    this.patientSubscription?.unsubscribe();
   }
 
 }
