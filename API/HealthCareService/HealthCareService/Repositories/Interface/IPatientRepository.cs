@@ -6,5 +6,6 @@ namespace HealthCareService.Repositories.Interface
     {
         Task<Patient> CreateAsync(Patient patient);
         Task<IEnumerable<Patient>> GetAllAsync();
+        Task<Patient?> GetByIdAsync(Guid id);
     }
 }

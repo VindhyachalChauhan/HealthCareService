@@ -71,6 +71,8 @@ export class FormComponent implements OnInit,OnDestroy {
     // if added successfully should redirect to 'patientList' page
    // this.patientDetails=this.complexForm.value as Patient
     this.patientDetails={
+      userId:'',
+      regTime:this.today,
       patient_name:this.complexForm.get('name')?.value,
       patient_gender:this.complexForm.get('gender')?.value,
       patient_dob:this.complexForm.get('dob')?.value,
@@ -84,8 +86,8 @@ export class FormComponent implements OnInit,OnDestroy {
    this.patientSubscription= this.patientService.registerPatient(this.patientDetails)
     .subscribe({
       next:(response)=>{
-        console.log(this.patientDetails)
-
+       // console.log(this.patientDetails)
+        this.route.navigateByUrl('/patientList');
       }
     })
 

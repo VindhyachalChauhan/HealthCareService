@@ -1,16 +1,17 @@
 <app-header></app-header>
   <div class="table-div">
-    <ng-container *ngIf="patients">
+    <!-- <ng-container *ngIf="patients">without async -->
+      <ng-container *ngIf="patients$| async as patients">
     <table class="table-class">
       <thead>
         <tr class="table-head">
-          <!-- <th>Patient ID</th> -->
+          <th>Patient ID</th>
           <th>Name</th>
           <th>Gender</th>
           <th>DOB(yyyy-MM-dd)</th>
           <th>Mobile</th>
           <th>Email</th>
-          <!-- <th>Registered on</th> -->
+          <th>Registered on</th>
           <th>Update</th>
         </tr>
       </thead>
@@ -18,16 +19,16 @@
         <!-- display all patients list -->
          
         <tr id="table-row" *ngFor="let patient of patients">
-        	<!-- <td id="table-id" >{{patient.p}}</td> -->
+        	<td id="table-id" >{{patient.userId}}</td>
           <td id="table-firstname" class="td-column">{{patient.patient_name}}</td>
           <td id="table-gender">{{patient.patient_gender}}</td>
           <td id="table-dob">{{patient.patient_dob}}</td>
           <td id="table-mobile">{{patient.patient_mobile}}</td>
           <td id="table-email">{{patient.patient_email}}</td>
-          <td id="table-registeredOn">display registeredDate</td>
+          <td id="table-registeredOn">{{patient.regTime}}</td>
           <td class="column-btn">
             <!--call view method with selected id when clicking this button-->
-            <a id="view" class="view-details">View Details</a>
+            <a id="view" class="view-details" [routerLink]="['/patientList',patient.userId]">View Details</a>
           </td>
         </tr>
       </tbody>

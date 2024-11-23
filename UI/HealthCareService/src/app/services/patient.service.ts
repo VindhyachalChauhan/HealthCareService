@@ -26,7 +26,10 @@ export class PatientService {
 
   getAllPatients():Observable<Patient[]>{
     return this.http.get<Patient[]>(this.API_URL+"/Patients/").pipe(catchError(this.handleError));
+  }
 
+  getPatientById(id:string):Observable<Patient>{
+    return this.http.get<Patient>(`${this.API_URL}/Patients/${id}`);
   }
 
   private handleError(error:HttpErrorResponse){

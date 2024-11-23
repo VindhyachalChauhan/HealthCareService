@@ -1,12 +1,12 @@
 export class Patient {
-   // id!: string;
+    userId!: string;
     patient_name!: string;
     patient_gender!: string;
     patient_dob!: string;
     patient_mobile!: number;
     patient_email!: string;
    // desc?: string;
-    // regTime: Date;
+     regTime!: Date;
 
     constructor(values: Object = {}) {
         Object.assign(this, values);

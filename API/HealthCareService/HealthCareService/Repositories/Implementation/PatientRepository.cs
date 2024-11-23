@@ -26,5 +26,10 @@ namespace HealthCareService.Repositories.Implementation
         {
             return await dbContext.Patients.ToListAsync();
         }
+
+        public async Task<Patient?> GetByIdAsync(Guid id)
+        {
+            return await dbContext.Patients.FirstOrDefaultAsync(p => p.Id == id);   
+        }
     }
 }
