@@ -13,7 +13,7 @@ import { FormGroup, FormBuilder,Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Patient } from 'src/app/models/patient';
-import { PatientService } from 'src/app/services/patient.service';
+import { DataService } from 'src/app/services/data.service';
 import { Subscription } from 'rxjs';
 
 // import * as alertify from 'alertify.js';
@@ -50,7 +50,7 @@ export class FormComponent implements OnInit,OnDestroy {
   }
 
   constructor( fb: FormBuilder,private datePipe: DatePipe,private route: Router, 
-    private patientService: PatientService
+    private dataService: DataService
   ){
     // add necessary validators
     this.complexForm = fb.group({
@@ -83,7 +83,7 @@ export class FormComponent implements OnInit,OnDestroy {
       // patient_dob:this.complexForm.get('dob'),
     }
    // console.log(this.patientDetails)
-   this.patientSubscription= this.patientService.registerPatient(this.patientDetails)
+   this.patientSubscription= this.dataService.registerPatient(this.patientDetails)
     .subscribe({
       next:(response)=>{
        // console.log(this.patientDetails)

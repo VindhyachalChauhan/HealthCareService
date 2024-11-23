@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Patient } from 'src/app/models/patient';
-import { PatientService } from 'src/app/services/patient.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-all-patients-list',
@@ -12,7 +12,7 @@ export class AllPatientsListComponent implements OnInit {
  //patients?:Patient[]
 patients$?:Observable<Patient[]>;
 
-  constructor(private patientService:PatientService){
+  constructor(private dataService:DataService){
 
   }
   ngOnInit(): void {
@@ -24,7 +24,7 @@ patients$?:Observable<Patient[]>;
     //     this.patients=response;
     //   }
     // });
-   this.patients$= this.patientService.getAllPatients();
+   this.patients$= this.dataService.getAllPatients();
 
   }
 

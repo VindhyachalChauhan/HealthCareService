@@ -9,6 +9,7 @@ import { AllPatientsListComponent } from './component/all-patients-list/all-pati
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ViewPatientComponent } from './component/view-patient/view-patient.component';
+import { AllRequestedAppointmentsComponent } from './component/all-requested-appointments/all-requested-appointments.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ViewPatientComponent } from './component/view-patient/view-patient.comp
     HeaderComponent,
     FormComponent,
     AllPatientsListComponent,
-    ViewPatientComponent
+    ViewPatientComponent,
+    AllRequestedAppointmentsComponent
   ],
   imports: [
     BrowserModule,

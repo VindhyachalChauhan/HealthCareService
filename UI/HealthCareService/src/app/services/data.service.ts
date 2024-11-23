@@ -3,10 +3,11 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http'
 import { Patient } from '../models/patient';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Appointment } from '../models/appointment';
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService {
+export class DataService {
 
   API_URL:String;
   constructor( private http:HttpClient) {
@@ -30,6 +31,30 @@ export class PatientService {
 
   getPatientById(id:string):Observable<Patient>{
     return this.http.get<Patient>(`${this.API_URL}/Patients/${id}`);
+  }
+
+  getDiseases():Observable<any>{
+    return this.http.get<any[]>(this.API_URL+"/Appointments/diseases").pipe(catchError(this.handleError));
+  }
+
+  bookAppointment(appointmentDetails:any):Observable<any>{
+    console.log(appointmentDetails)
+    return this.http.post<any>(this.API_URL+"/Appointments",appointmentDetails).pipe(catchError(this.handleError));
+
+  }
+
+  scheduledAppointment():Observable<Appointment[]>{
+    //console.log(appointmentDetails)
+    return this.http.get<Appointment[]>(`${this.API_URL}/Appointments`).pipe(catchError(this.handleError));
+
+  }
+
+  getSinglePatientAppointments(id:string):Observable<Appointment[]>{
+    return this.http.get<Appointment[]>(`${this.API_URL}/Appointments/${id}`);
+  }
+
+  deleteAppointment(id:string):Observable<Appointment>{
+    return this.http.delete<Appointment>(`${this.API_URL}/Appointments/${id}`);
   }
 
   private handleError(error:HttpErrorResponse){

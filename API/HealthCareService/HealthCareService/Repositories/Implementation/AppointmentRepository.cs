@@ -20,11 +20,16 @@ namespace HealthCareService.Repositories.Implementation
             return appointment;
         }
 
-     
-
-        public Task DeleteAsync(Guid id)
+        public async Task<Appointment?> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var existingAppointment = await dbContext.Appointments.FirstOrDefaultAsync(a => a.bookingId==id);
+            if (existingAppointment is null)
+            {
+                return null;
+            }
+            dbContext.Appointments.Remove(existingAppointment);
+            await dbContext.SaveChangesAsync();
+            return existingAppointment;
         }
 
         public async Task<IEnumerable<Appointment>> GetAllAsync()
@@ -32,19 +37,20 @@ namespace HealthCareService.Repositories.Implementation
             return await dbContext.Appointments.ToListAsync();
         }
 
-        public Task<Appointment?> GetByIdAsync(Guid id)
+        public async Task<Appointment?> GetByIdAsync(Guid id)
         {
-            return dbContext.Appointments.FirstOrDefaultAsync(a=>a.bookingId==id);   
+            return await dbContext.Appointments.FirstOrDefaultAsync(a=>a.bookingId==id);   
         }
 
-        public Task<Appointment?> GetByPatientIdAsync(Guid id)
+        public async Task<IEnumerable<Appointment>> GetByPatientIdAsync(Guid id)
         {
-            return dbContext.Appointments.FirstOrDefaultAsync(a=>a.patientId==id);
+            return await dbContext.Appointments.Where(a => a.patientId == id).ToListAsync();
         }
-
-        public Task<Appointment> UpdateAsync(Appointment appointment)
+            public Task<Appointment> UpdateAsync(Appointment appointment)
         {
             throw new NotImplementedException();
         }
+
+      
     }
 }

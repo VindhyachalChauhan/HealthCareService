@@ -1,6 +1,6 @@
 
 <app-header></app-header>
-
+test
 <div class="view-container" *ngIf="patient">
 
   <div class="details-container">
@@ -15,7 +15,7 @@
       Gender:<span class="details">{{patient.patient_gender}}</span>
     </div>
     <div class="div-name">
-      Date of birth:<span class="details">{{patient.patient_dob| date: 'yyyy/MM/dd'}}</span>
+      Date of birth:<span class="details">{{patient.patient_dob}}</span>
     </div>
     <div class="div-name">
       Mobile:<span class="details">{{patient.patient_mobile}}</span>
@@ -54,10 +54,15 @@
                   Select Disease:<span class="required">*</span>
                 </label>
                 <div>
-                  <select id="select-selectDisease" class="text-box select" >
+                    <select id="select-selectDisease" 
+                    formControlName="selectDisease"
+                    class="text-box select" >
                     <option class="label-content" value="null" disabled="true" >Select disease</option>
                     <!-- display diseases list-->
-                    <option id="option-value" class="label-content"><!-- display diseases here--></option>
+                    <option
+                    *ngFor="let name of listOfDiseases"
+                    id="option-value" 
+                   class="label-content">{{name}}</option>
                   </select>
                 </div>
                 <div id="error-no-selectDisease" class="alert alert-danger error-msg">
@@ -70,10 +75,10 @@
                 Priority:<span class="required">*</span>
               </label>
               <div>
-                <select id="priority" class="text-box select" >
+                <select id="priority" formControlName="priority" class="text-box select" >
                   <option class="label-content" value="null" disabled="true" >Select priority</option>
-                  <option id="normal" class="label-content" value="Normal">Normal</option>
-                  <option id="urgent" class="label-content" value="Urgent">Urgent</option>
+                  <option id="normal"  class="label-content" value="Normal">Normal</option>
+                  <option id="urgent"  class="label-content" value="Urgent">Urgent</option>
                 </select>
               </div>
               <div id="error-no-priority" class="alert alert-danger error-msg">
@@ -86,7 +91,9 @@
                 tentativeDate:<span class="required">*</span>
               </label>
               <div >
-                <input id="date-input" class="form-control date-input glyphicon glyphicon-calendar" type="date" placeholder="tentativeDate" required min="{{today}}">
+                <input id="date-input" 
+                formControlName="tentativeDate"
+                class="form-control date-input glyphicon glyphicon-calendar" type="date" placeholder="tentativeDate" required min="{{today}}">
               </div>
               <div id="error-no-tentativeDate" class="alert alert-danger error-msg">
                 notentativeDate
@@ -106,8 +113,12 @@
   id="table-container" class="table-container">
     <h2 class="view-header">Scheduled Appointment</h2>
     <!-- display no records found message if there is no appointment -->
-    <div class="no-records">No Records Found</div>
-    <table class="table-class">
+    <div 
+    *ngIf="!isTableEnabled"
+    class="no-records">No Records Found</div>
+    <table class="table-class"
+    *ngIf="isTableEnabled"
+    >
       <thead>
         <tr class="table-head">
           <th>Appointment id</th>
@@ -120,15 +131,19 @@
       </thead>
       <tbody>
         <!--display scheduled appointments-->
-        <tr id="table-row">
-          <td id="table-id" ><!--display bookingId--></td>
-          <td id="table-disease" class="td-column"><!--display disease--></td>
-          <td id="table-priority" ><!--display priority--></td>
-          <td id="table-tentativedate"><!--display tentativeDate--></td>
-          <td id="table-requestedOn"><!--display bookingTime--></td>
+        <tr id="table-row"
+        *ngFor="let response of ScheduledAppointmentResponse"
+        >
+          <td id="table-id" ><!--display bookingId-->{{response.bookingId}}</td>
+          <td id="table-disease" class="td-column"><!--display disease-->{{response.disease}}</td>
+          <td id="table-priority" ><!--display priority-->{{response.priority}}</td>
+          <td id="table-tentativedate"><!--display tentativeDate-->{{response.tentativeDate}}</td>
+          <td id="table-requestedOn"><!--display bookingTime-->{{response.regTime}}</td>
           <td class="column-btn">
             <!-- call cancelAppointment method with selected id when clicking on this button-->
-            <button id="user-cancel" class="btn btn-danger btn-spc">
+            <button 
+            (click)="cancelAppointment(response.bookingId)"
+            id="user-cancel" class="btn btn-danger btn-spc">
               <span class="btn-value">Cancel Appointment</span>
             </button>
           </td>
