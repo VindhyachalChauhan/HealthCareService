@@ -22,10 +22,11 @@ namespace HealthCareService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("HealthCareService.Models.ApplicationUser", b =>
+            modelBuilder.Entity("HealthCareService.Models.Domain.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("location")
                         .IsRequired()

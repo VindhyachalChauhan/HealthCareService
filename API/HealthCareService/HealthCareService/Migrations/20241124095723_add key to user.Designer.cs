@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthCareService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241116155611_initial")]
-    partial class initial
+    [Migration("20241124095723_add key to user")]
+    partial class addkeytouser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,10 +25,11 @@ namespace HealthCareService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("HealthCareService.Models.ApplicationUser", b =>
+            modelBuilder.Entity("HealthCareService.Models.Domain.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("location")
                         .IsRequired()

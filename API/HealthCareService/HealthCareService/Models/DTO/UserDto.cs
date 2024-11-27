@@ -1,13 +1,8 @@
-﻿
-using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace HealthCareService.Models
+﻿namespace HealthCareService.Models.DTO
 {
-    public class ApplicationUser
+    public class UserDto
     {
-        [Key]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string user_name { get; set; }
         public string user_email { get; set; }
         public string password { get; set; }

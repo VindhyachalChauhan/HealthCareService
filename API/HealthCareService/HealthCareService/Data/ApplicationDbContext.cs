@@ -1,12 +1,11 @@
-﻿using HealthCareService.Models;
-using HealthCareService.Models.Domain;
+﻿using HealthCareService.Models.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace HealthCareService.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 

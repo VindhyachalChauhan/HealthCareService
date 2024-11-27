@@ -2,6 +2,7 @@
 using HealthCareService.Models.Domain;
 using HealthCareService.Models.DTO;
 using HealthCareService.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,6 +55,7 @@ namespace HealthCareService.Controllers
 
         //GET /api/patients
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllPatients()
         {
             var patients = await patientRepository.GetAllAsync();
