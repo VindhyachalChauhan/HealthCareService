@@ -38,7 +38,7 @@ export class AllRequestedAppointmentsComponent implements OnInit {
   appointments() {
 
     // get all requested appointments from service
-    this.dataService.scheduledAppointment().
+    this.dataService.requestedAppointments().
     subscribe({
       next:(response)=>{
         this.allAppointments=response

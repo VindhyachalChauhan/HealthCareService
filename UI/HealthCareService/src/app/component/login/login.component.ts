@@ -11,23 +11,28 @@
 
 
 
-import { Component, OnInit,  Output, EventEmitter } from '@angular/core';
+import { Component, OnInit,  Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { DataService } from '../../services/data.service';
+import { Subscription } from 'rxjs';
+import { ApiService } from 'src/app/services/api.service';
 // import * as alertify from 'alertify.js';
 
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
-	styleUrls: ['./login.component.css']
+	styleUrls: ['./login.component.css'],
+	providers:[DataService,ApiService]
 })
 export class LoginComponent implements OnInit {
 	
 	isLoggedIn: boolean = false;
 	loginForm!: FormGroup;
 	isLoginFailed: boolean = false;
+	// private loginSubscription?:Subscription
+
 
 	emptyPassword = 'You must enter a password';
 	minlengthPassword = 'Password must be at least 8 characters long';
@@ -36,8 +41,14 @@ export class LoginComponent implements OnInit {
 
     emailErrMsg = 'You must enter a valid Email ID';
 
-	constructor(private route: Router, private dataService: DataService) {
+	constructor(private route: Router, private dataService: DataService,
+		private apiService:ApiService
+	) {
 	 }
+
+// 	ngOnDestroy(): void {
+// this.loginSubscription?.unsubscribe();
+// 	}
 
 	ngOnInit() {
 		// add necessary validators
@@ -49,12 +60,51 @@ export class LoginComponent implements OnInit {
 	}
 
 	doLogin() {
-
+		//implementting cookies login
+		this.apiService.checkLogin(this.loginForm.get('email')?.value,this.loginForm.get('password')?.value).
+		subscribe({
+			next:(response)=>{
+				console.log(response)
+			}
+		})
+		
 		// call authenticateUser method to perform login operation
 		// if success, redirect to profile page
 		// else display appropriate error message
 		   // reset the form
-		   console.log("doLogin",this.loginForm.value)
+		//    console.log("doLogin",this.loginForm.value)
+		//    localStorage.clear()
+		//    var data!:Boolean
+		//    console.log("login")
+		//  this.dataService.authenticateUser(this.loginForm.get('email')?.value,this.loginForm.get('password')?.value).
+		//    subscribe({
+		// 	next:(response)=>{
+		// 		console.log("test")
+		// 	}
+		//    })
+		// //    .subscribe({
+		// // 	next:(response)=>{
+		// // 		console.log("hi",response)
+		// // 		// data=response
+		// // 		// console.log(data)
+		// // 	},
+		// // 	error:(error)=>{
+		// // 		console.log(error);
+		// // 		}
+		// //    });
+		//    if(data)
+		//    {
+		// 	// console.log(data)
+		// 	this.isLoggedIn=true
+		// 	this.route.navigate(['/profile'])
+		//    }
+		//    else{
+		// 	// console.log(data)
+
+		// 	this.isLoginFailed=true
+		// 	this.loginForm.reset()
+		//    }
+
 	}
 
 	signUp() {

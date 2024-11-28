@@ -24,7 +24,7 @@ patients$?:Observable<Patient[]>;
     //     this.patients=response;
     //   }
     // });
-   this.patients$= this.dataService.getAllPatients();
+   this.patients$= this.dataService.getAllPatientsList();
 
   }
 

@@ -94,16 +94,19 @@
 
 import { HttpErrorResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject,Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject,Observable, of, Subject, throwError } from 'rxjs';
 
 import { Credentials } from '../models/credentials.model';
 import { Patient } from '../models/patient';
 import { Appointment } from '../models/appointment';
 
 import { ApiService } from './api.service';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+
+})
 export class DataService {
 
   userId!: string;
@@ -119,53 +122,80 @@ export class DataService {
     // store 'id' from response as key name 'id' to the localstorage
     // store 'token' from response as key name 'token' to the localstorage
 
+    var subject =new Subject<boolean>();
+    this.api.checkLogin(user_email,password)
+    .subscribe({
+      next:(respone)=>{
+        // console.log(respone.id)
+        if(respone.id===null){
+          subject.next(false)
+          this.isLoggedIn=false
+          this.isLogIn=new BehaviorSubject<boolean>(false);
+        }
+        else{
+          // console.log(respone.id)
+          this.userId=respone.id
+          localStorage.setItem('id',respone.id)
+          localStorage.setItem('token',respone.token)
+          this.isLoggedIn=true
+          this.isLogIn=new BehaviorSubject<boolean>(true);
+        }
+      },
+      error:(error)=>{
+        console.log(error)
+      }
+    })
     // return true if user authenticated
-
     // return false if user not authenticated 
+    console.log(subject.asObservable())
+    return subject.asObservable();
 
-    return;
   }
 
   getAuthStatus(): Observable<boolean> {
     // return true/false as a auth status
-
-    return
+    if(this.isLoggedIn)
+      return of(true)
+    return of(false)
   }
 
   regNewUser(regNewUser: { user_name: any; password: any; user_mobile: any; user_email: any; location: any; }): Observable<any> {
     // should return response retrieved from ApiService
-
+    return this.api.regNewUser(regNewUser).pipe(catchError(this.handleError))
     // handle error 
 
-    return;
   }
 
   doLogOut() {
     // You should remove the key 'id', 'token' if exists
+    this.isLoggedIn=false
+    this.isLogIn=new BehaviorSubject(false)
+    localStorage.removeItem('id')
+    localStorage.removeItem('token')
 
   }
 
   getUserDetails(): Observable<any> {
     // should return user details retrieved from api service
 
-    return;
+    return this.api.getUserDetails(this.userId).pipe();
   }
 
-  updateProfile(userId:string, userDetails: any): Observable<boolean> {
+  // updateProfile(userId:string, userDetails: any): Observable<boolean> {
 
-    // should return response retrieved from ApiService
+  //   // should return response retrieved from ApiService
 
-    // handle error 
+  //   // handle error 
 
-    return;
-  }
+  //   return;
+  // }
 
   registerPatient(patientDetails: Patient): Observable<any> {
     // should return response retrieved from ApiService
 
     // handle error 
 
-    return;
+    return this.api.registerPatient(patientDetails).pipe(catchError(this.handleError));
   }
 
   getAllPatientsList(): Observable<any> {
@@ -173,7 +203,7 @@ export class DataService {
 
     // handle error 
 
-    return;
+    return this.api.getAllPatientsList().pipe(catchError(this.handleError));
   }
 
   getParticularPatient(id: any): Observable<any> {
@@ -181,7 +211,7 @@ export class DataService {
 
     // handle error 
 
-    return;
+    return this.api.getParticularPatient(id).pipe(catchError(this.handleError));
   }
   
   diseasesList(): Observable<any> {
@@ -189,7 +219,7 @@ export class DataService {
 
     // handle error 
 
-    return;
+    return this.api.diseasesList().pipe(catchError(this.handleError));
   }
 
   scheduleAppointment(appointmentDetails: any): Observable<any> {
@@ -197,7 +227,7 @@ export class DataService {
 
     // handle error 
 
-    return;
+    return this.api.scheduleAppointment(appointmentDetails).pipe(catchError(this.handleError));
   }
 
   getSinglePatientAppointments(patientId: string): Observable<any> {
@@ -205,7 +235,7 @@ export class DataService {
 
     // handle error 
 
-    return;
+    return this.api.getSinglePatientAppointments(patientId).pipe(catchError(this.handleError));
   }
 
   deleteAppointment(appointmentId: any): Observable<any> {
@@ -213,7 +243,7 @@ export class DataService {
 
     // handle error
 
-    return
+    return this.api.deleteAppointment(appointmentId).pipe(catchError(this.handleError));
   }
 
   requestedAppointments(): Observable<any> {
@@ -221,11 +251,13 @@ export class DataService {
 
     // handle error 
 
-    return;
+    return this.api.requestedAppointments().pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {
     // handle error here
+    return throwError(error)
+
   }
 
 

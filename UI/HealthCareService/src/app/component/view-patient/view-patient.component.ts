@@ -61,7 +61,7 @@ export class ViewPatientComponent implements OnInit ,OnDestroy{
     // get Particular Patient from service using patient id and assign response to patient property
 
        if(patientId)
-       this.dataService.getPatientById(patientId)
+       this.dataService.getParticularPatient(patientId)
       .subscribe({
         next:(response)=>{
           console.log(response)
@@ -82,7 +82,7 @@ export class ViewPatientComponent implements OnInit ,OnDestroy{
   bookAppointment() {
     // get diseases list from service
 
-    this.dataService.getDiseases()
+    this.dataService.diseasesList()
     .subscribe({
      next: (response)=>{
         this.listOfDiseases=response
@@ -109,7 +109,7 @@ export class ViewPatientComponent implements OnInit ,OnDestroy{
     // if booked successfully should redirect to 'requested_appointments' page
     const dataPipe:DatePipe=new DatePipe('en-IN')
     const date=dataPipe.transform(new Date(),'d/MM/y HH:mm:ss')
-    this.dataService.bookAppointment({
+    this.dataService.scheduleAppointment({
       "patientId":this.patient?.userId,
       "disease":this.appointmentForm.get('selectDisease')?.value,
       "tentativedate":this.appointmentForm.get('tentativeDate')?.value,
