@@ -68,6 +68,7 @@ export class LoginComponent implements OnInit {
 			}
 		})
 		
+		
 		// call authenticateUser method to perform login operation
 		// if success, redirect to profile page
 		// else display appropriate error message
