@@ -55,7 +55,7 @@ namespace HealthCareService.Controllers
 
         //GET /api/patients
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetAllPatients()
         {
             var patients = await patientRepository.GetAllAsync();

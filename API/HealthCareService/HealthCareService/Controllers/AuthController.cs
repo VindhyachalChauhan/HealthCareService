@@ -1,5 +1,6 @@
 ﻿
 
+using Azure.Core;
 using HealthCareService.Models.DTO;
 using HealthCareService.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
@@ -24,37 +25,57 @@ namespace HealthCareService.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+        //public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+        //{
+        //    //chech Email
+        //    var identityUser = await userManager.FindByEmailAsync(request.Email);
+        //    if (identityUser is not null)
+        //    {
+        //        // check Password
+        //        var checkPasswordResult = await userManager.CheckPasswordAsync(identityUser, request.Password);
+
+        //        if (checkPasswordResult)
+        //        {
+        //            var roles = await userManager.GetRolesAsync(identityUser);
+        //            //create a token and response
+
+        //            var jwtToken = tokenRepository.CreateJwtToken(identityUser, roles.ToList());
+
+        //            var response = new LoginResponseDto()
+        //            {
+        //                Id=identityUser.Id,
+        //                Email = request.Email,
+        //                Roles = roles.ToList(),
+        //                Token = jwtToken
+        //            };
+        //            return Ok(response);
+        //        }
+        //    }
+        //    ModelState.AddModelError("", "Email or Password Incorrect");
+
+        //    return ValidationProblem(ModelState);
+        //}
+
+        [HttpGet]
+        [Route("viewprofile/{id:Guid}")]
+        public async Task<IActionResult> GetUser([FromRoute] Guid id)
         {
-            //chech Email
-            var identityUser = await userManager.FindByEmailAsync(request.Email);
-            if (identityUser is not null)
+            var identityUser = await userManager.FindByIdAsync(id.ToString());
+            if (identityUser is null)
             {
-                // check Password
-                var checkPasswordResult = await userManager.CheckPasswordAsync(identityUser, request.Password);
-
-                if (checkPasswordResult)
-                {
-                    var roles = await userManager.GetRolesAsync(identityUser);
-                    //create a token and response
-
-                    var jwtToken = tokenRepository.CreateJwtToken(identityUser, roles.ToList());
-
-                    var response = new LoginResponseDto()
-                    {
-                        Id=identityUser.Id,
-                        Email = request.Email,
-                        Roles = roles.ToList(),
-                        Token = jwtToken
-                    };
-                    return Ok(response);
-                }
+                return NotFound();
             }
-            ModelState.AddModelError("", "Email or Password Incorrect");
-
-            return ValidationProblem(ModelState);
+            //var response = new UserDto
+            //{
+            //    Id =Guid.Parse(identityUser.Id),
+            //    location = identityUser.Location,
+            //    user_email = identityUser.Email,
+            //    user_name = identityUser.Name,
+            //    password = identityUser.Password,
+            //};
+            //return Ok(response);
+            return Ok(identityUser);
         }
-
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] AddUserRequestDto request)

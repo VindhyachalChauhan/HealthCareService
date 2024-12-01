@@ -7,12 +7,13 @@ import { HeaderComponent } from './component/header/header.component';
 import { FormComponent } from './component/form/form.component';
 import { AllPatientsListComponent } from './component/all-patients-list/all-patients-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { ViewPatientComponent } from './component/view-patient/view-patient.component';
 import { AllRequestedAppointmentsComponent } from './component/all-requested-appointments/all-requested-appointments.component';
 import { RegisterNewUserComponent } from './component/register-new-user/register-new-user.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { LoginComponent } from './component/login/login.component';
+import { HeaderInterceptor } from './interceptors/header.interceptor';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,11 @@ import { LoginComponent } from './component/login/login.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{
+    provide :HTTP_INTERCEPTORS,
+    useClass:HeaderInterceptor,
+    multi:true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

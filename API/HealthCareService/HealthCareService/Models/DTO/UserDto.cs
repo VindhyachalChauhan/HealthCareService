@@ -9,5 +9,6 @@
         //  public DateTime user_dob{get;set;}
         public long user_mobile { get; set; }
         public string location { get; set; }
+
     }
 }

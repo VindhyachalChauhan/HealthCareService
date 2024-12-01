@@ -15,6 +15,8 @@ import { Component, OnInit, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { DataService } from '../../services/data.service';
+import { TestService } from 'src/app/services/test.service';
+import { UsertT } from 'src/app/models/userT.model';
 // import * as alertify from 'alertify.js';
 
 @Component({
@@ -24,6 +26,8 @@ import { DataService } from '../../services/data.service';
 })
 
 export class ProfileComponent implements OnInit {
+  userDetailsT:UsertT | undefined;
+
 
   // used as a flag to display or hide form
   editProfile = false;
@@ -34,7 +38,7 @@ export class ProfileComponent implements OnInit {
   mobileErrMsg = 'You must enter a valid mobile number';
   emailErrMsg = 'You must enter a valid Email ID';
   locationErrMsg = 'You must enter the location';
-  constructor(private dataService: DataService) { 
+  constructor(private testService: TestService) { 
 
   }
 
@@ -52,12 +56,22 @@ export class ProfileComponent implements OnInit {
     
     // get profile details and display it
     this.getProfileDetails()
+   this.userDetailsT= this.testService.getUser();
+
+
+    
   }
 
   getProfileDetails() {
-
     // retrieve user details from service using userId
-    
+    this.testService.getUserDetails()
+    // this.dataService.user()
+    .subscribe({
+      next:(response)=>{
+        console.log(response)
+        this.userDetails=response
+      }
+    })
 
   }
 

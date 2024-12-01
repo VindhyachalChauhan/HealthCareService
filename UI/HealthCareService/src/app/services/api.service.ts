@@ -37,7 +37,7 @@ export class ApiService {
   public checkLogin(user_email: string, password: string): Observable<any> {
     // should return response from server
     // console.log
-    return this.http.post<any>(this.API_URL+"/Auth/Login",{
+    return this.http.post<any>(this.API_URL+"/Users/signin",{
             email:user_email,
             password:password
           }).pipe(catchError(this.handleError));
@@ -47,7 +47,7 @@ export class ApiService {
 
   public regNewUser(regNewUser: any): Observable<any> {
     // should return response from server
-    return this.http.post<any>(this.API_URL+"/Auth/Register",regNewUser).pipe(catchError(this.handleError));
+    return this.http.post<any>(this.API_URL+"/Users",regNewUser).pipe(catchError(this.handleError));
 
     // handle error 
 
@@ -55,6 +55,7 @@ export class ApiService {
 
   public getUserDetails(userId: string): Observable<any> {
     // should return user details retireved from server
+    // return this.http.get<any>(this.API_URL+"/Users/"+userId).pipe(catchError(this.handleError));
     return this.http.get<any>(this.API_URL+"/Users/"+userId).pipe(catchError(this.handleError));
 
     // handle error 

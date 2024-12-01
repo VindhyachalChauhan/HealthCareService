@@ -102,6 +102,8 @@ import { Appointment } from '../models/appointment';
 
 import { ApiService } from './api.service';
 import { catchError, tap } from 'rxjs/operators';
+import { Users } from '../models/user';
+import { UsertT } from '../models/userT.model';
 
 @Injectable({
   providedIn: 'root'
@@ -109,6 +111,12 @@ import { catchError, tap } from 'rxjs/operators';
 })
 export class DataService {
 
+  // $user=new BehaviorSubject<UsertT|undefined>(undefined);
+
+
+
+
+  // userId: string='f774208c-795f-47ad-f18d-08dd105c5082';
   userId!: string;
 
   isLoggedIn = false;
@@ -117,6 +125,26 @@ export class DataService {
   constructor(private api: ApiService) {
     this.isLogIn = new BehaviorSubject<boolean>(false);
   }
+// authenticateUserT(user_email: string, password: string){
+//  return this.api.checkLogin(user_email,password)
+
+// }
+// setUser(user:UsertT):void{
+//   this.$user.next(user)
+//   this.userId=user.id
+//   console.log("setUser.",this.$user)
+//   localStorage.setItem('id',user.id)
+
+//   // localStorage.setItem('user-email',user.user_email)
+//   // localStorage.setItem('token',user.user_mobile)
+//  }
+// user():Observable<UsertT|undefined>{
+//   //  console.log("user...")
+//   return this.$user.asObservable();
+// }
+
+
+
 
   authenticateUser(user_email: string, password: string): Observable<boolean> {
     // store 'id' from response as key name 'id' to the localstorage
@@ -126,7 +154,7 @@ export class DataService {
     this.api.checkLogin(user_email,password)
     .subscribe({
       next:(respone)=>{
-        // console.log(respone.id)
+        console.log("dataService",respone)
         if(respone.id===null){
           subject.next(false)
           this.isLoggedIn=false
@@ -177,8 +205,10 @@ export class DataService {
 
   getUserDetails(): Observable<any> {
     // should return user details retrieved from api service
+   this.userId!= localStorage.getItem('id')
+   console.log("dataService..",this.userId)
 
-    return this.api.getUserDetails(this.userId).pipe();
+    return this.api.getUserDetails(this.userId).pipe(catchError(this.handleError));
   }
 
   // updateProfile(userId:string, userDetails: any): Observable<boolean> {

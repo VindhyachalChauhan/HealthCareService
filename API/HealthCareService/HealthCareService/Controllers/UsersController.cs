@@ -1,8 +1,12 @@
-﻿using HealthCareService.Models.Domain;
+﻿using Azure.Core;
+using HealthCareService.Models.Domain;
 using HealthCareService.Models.DTO;
+using HealthCareService.Repositories.Implementation;
 using HealthCareService.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace HealthCareService.Controllers
 {
@@ -11,10 +15,12 @@ namespace HealthCareService.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository userRepository;
+        private readonly ITokenRepository tokenRepository;
 
-        public UsersController(IUserRepository userRepository)
+        public UsersController(IUserRepository userRepository, ITokenRepository tokenRepository)
         {
             this.userRepository = userRepository;
+            this.tokenRepository = tokenRepository;
         }
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] AddUserRequestDto request)
@@ -48,9 +54,9 @@ namespace HealthCareService.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> GetUser([FromRoute]Guid id)
+        public async Task<IActionResult> GetUser([FromRoute] Guid id)
         {
-            var existingUser= await userRepository.GetAsync(id);  
+            var existingUser = await userRepository.GetAsync(id);
             if (existingUser is null)
             {
                 return NotFound();
@@ -66,6 +72,39 @@ namespace HealthCareService.Controllers
                 password = existingUser.password,
             };
             return Ok(response);
+        }
+        [HttpPost]
+        [Route("signin")]
+        public async Task<IActionResult> SignIn(LoginRequestDto user)
+        {
+            var identityUser = await userRepository.SignInAsync(user);
+            if (identityUser is null)
+            {
+                return NotFound("Invalid User");
+            }
+
+            var jwtToken = tokenRepository.CreateJwtToken(identityUser);
+
+            var response = new LoginResponseDto()
+            {
+                Id = identityUser.Id.ToString(),
+                Email = user.Email,
+                //Roles = roles.ToList(),
+                Token = jwtToken
+            };
+            return Ok(response);
+            //var response = new UserDto
+            //{
+            //    Id = identityUser.Id,
+            //    location = identityUser.location,
+            //    user_email = identityUser.user_email,
+            //    user_mobile = identityUser.user_mobile,
+            //    user_name = identityUser.user_name,
+            //    password = identityUser.password,
+            //};
+            //return Ok(response);
+
+
         }
     }
 }

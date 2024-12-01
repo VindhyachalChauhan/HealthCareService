@@ -1,4 +1,5 @@
-﻿using HealthCareService.Repositories.Interface;
+﻿using HealthCareService.Models.Domain;
+using HealthCareService.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,14 +16,15 @@ namespace HealthCareService.Repositories.Implementation
         {
             this.configuration = configuration;
         }
-        public string CreateJwtToken(IdentityUser user, List<string> roles)
+        //public string CreateJwtToken(IdentityUser user, List<string> roles)
+        public string CreateJwtToken(ApplicationUser user)
         {
             //Create claims
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.user_email)
             };
-            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            //claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             //JWT security Token parameter
 

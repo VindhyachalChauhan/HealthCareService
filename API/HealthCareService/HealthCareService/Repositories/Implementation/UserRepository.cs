@@ -1,5 +1,6 @@
 ﻿using HealthCareService.Data;
 using HealthCareService.Models.Domain;
+using HealthCareService.Models.DTO;
 using HealthCareService.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,13 @@ namespace HealthCareService.Repositories.Implementation
             await dbContext.User.AddAsync(user);
             await dbContext.SaveChangesAsync();
             return user;
+        }
+
+        public async Task<ApplicationUser> SignInAsync(LoginRequestDto user)
+        {
+            //return  (ApplicationUser)dbContext.User.Where(u => u.user_email == user.Email && u.password == user.Password);
+            return await dbContext.User.FirstOrDefaultAsync(u => u.user_email == user.Email && u.password == user.Password);
+
         }
 
         public Task<ApplicationUser> UpdateAsync(ApplicationUser user)
