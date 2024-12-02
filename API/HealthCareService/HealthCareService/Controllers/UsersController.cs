@@ -73,6 +73,38 @@ namespace HealthCareService.Controllers
             };
             return Ok(response);
         }
+
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> UpdateUser([FromRoute] Guid id,UpdateUserDto updateUserDto)
+        {
+            //convert dto to domain model
+            var user = new ApplicationUser
+            {
+                Id=id,
+                user_name = updateUserDto.user_name,
+                user_mobile = updateUserDto.user_mobile,
+                location = updateUserDto.location,
+                user_email=updateUserDto.user_email,
+                //password=updateUserDto.password
+            };
+            
+          var updatedUser=  await userRepository.UpdateAsync(user); 
+            if (updatedUser is null)
+            {
+                return NotFound();
+            }
+            var response = new UpdateUserDto
+            {
+                user_email = user.user_email,
+                user_mobile = user.user_mobile,
+                location = user.location,
+                user_name = user.user_name,
+
+            };
+            return Ok(response);
+        }
+        
         [HttpPost]
         [Route("signin")]
         public async Task<IActionResult> SignIn(LoginRequestDto user)

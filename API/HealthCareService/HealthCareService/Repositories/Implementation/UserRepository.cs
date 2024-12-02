@@ -14,7 +14,7 @@ namespace HealthCareService.Repositories.Implementation
         {
             this.dbContext = dbContext;
         }
-        public async Task<ApplicationUser> GetAsync(Guid id)
+        public async Task<ApplicationUser?> GetAsync(Guid id)
         {
             return await dbContext.User.FirstOrDefaultAsync(u=>u.Id==id);
         }
@@ -26,16 +26,27 @@ namespace HealthCareService.Repositories.Implementation
             return user;
         }
 
-        public async Task<ApplicationUser> SignInAsync(LoginRequestDto user)
+        public async Task<ApplicationUser?> SignInAsync(LoginRequestDto user)
         {
             //return  (ApplicationUser)dbContext.User.Where(u => u.user_email == user.Email && u.password == user.Password);
             return await dbContext.User.FirstOrDefaultAsync(u => u.user_email == user.Email && u.password == user.Password);
 
         }
 
-        public Task<ApplicationUser> UpdateAsync(ApplicationUser user)
+        public async Task<ApplicationUser?> UpdateAsync(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            var existingUser = await dbContext.User.FirstOrDefaultAsync(u=>u.Id == user.Id);   
+
+            if (existingUser is null)
+            {
+                return null;
+            }
+            //for password
+            user.password = existingUser.password;
+            dbContext.Entry(existingUser).CurrentValues.SetValues(user);
+
+            await dbContext.SaveChangesAsync();
+            return user;
         }
     }
 }

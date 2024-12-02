@@ -54,6 +54,14 @@ export class TestService {
 
     return this.api.getUserDetails(this.userId).pipe(catchError(this.handleError));
   }
+  updateProfile(userId:string, userDetails: any): Observable<boolean> {
+
+    // should return response retrieved from ApiService
+
+    // handle error 
+
+    return this.api.updateDetails(userId,userDetails).pipe(catchError(this.handleError));
+  }
 
    doLogOut() {
     localStorage.clear();

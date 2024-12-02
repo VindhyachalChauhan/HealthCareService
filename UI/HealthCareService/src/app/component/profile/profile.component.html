@@ -8,7 +8,9 @@
     </div>
     <div class="home-profile-wrapper border">
             <!-- hide profile details if editing the form-->
-      <ul id="profileDetails" class="profile-details">
+      <ul
+      *ngIf="!editProfile"
+       id="profileDetails" class="profile-details">
         <li class="list-items" >
           Name:
           <span id="usernameVal"  >
@@ -37,20 +39,29 @@
       </ul>
 
       <!-- show edit profile form if edit profile button clicked-->
-      <form id="editProfileForm" class="ro-form profile-form">
+      <form 
+      *ngIf="editProfile"
+      (ngSubmit)="changeMyProfile()"
+      [formGroup]="editProfileForm"      
+      id="editProfileForm" class="ro-form profile-form">
         <h2>Edit your profile</h2>
         <div class="form-group">
           <label for="username">
             Name
           </label>
-          <input type="text" id="consumerName" value="" placeholder="Name">
+          <input 
+          [readOnly]="true"
+          formControlName="userName"
+          type="text" id="consumerName" value="" placeholder="Name">
 
         </div>
         <div class="form-group">
           <label for="mobile">
             Contact number
           </label>
-          <input type="number" value="" id="mobile" placeholder="mobile number">
+          <input type="number"
+          formControlName="mobile"
+          value="" id="mobile" placeholder="mobile number">
           <div class="form-error-messages">
             {{mobileErrMsg}}
           </div>
@@ -59,7 +70,9 @@
           <label for="email">
             Email
           </label>
-          <input type="email" value="" id="email" placeholder="Email">
+          <input type="email"
+          formControlName="email"
+          value="" id="email" placeholder="Email">
           <div class="form-error-messages">
             {{emailErrMsg}}
           </div>
@@ -69,7 +82,9 @@
           <label for="location">
             Location
           </label>
-          <input type="text" value="" id="location" placeholder="Location">
+          <input type="text" 
+          formControlName="location"
+          value="" id="location" placeholder="Location">
           <div class="form-error-messages">
             {{locationErrMsg}}
           </div>
@@ -77,18 +92,26 @@
 
         <!-- disable button if form not valid -->
         <!-- call changeMyProfile method when clicking on this button-->
-        <button class="btn" type="submit" id="editSubmitBtn">Make changes</button>
+        <button
+        *ngIf="editProfile"
+        class="btn" type="submit" id="editSubmitBtn">Make changes</button>
       </form>
       <div class="profile-edit-choice">
         
         <!-- show button if not editing the form-->
         <!-- call editMyProfile method when clicking on this button-->
-        <button id="editProfileBtn" class="prompt-btn btn">
+        <button
+        *ngIf="!editProfile" 
+        (click)="editMyProfile()"
+        id="editProfileBtn" class="prompt-btn btn">
         Edit profile</button>
 
         <!-- show button if editing the form-->
         <!-- call discardEdit method when clicking on this button-->
-        <button id="editDiscardBtn" class="alert-btn btn">Discard</button>
+        <button 
+        *ngIf="editProfile"
+        (click)="discardEdit()"
+        id="editDiscardBtn" class="alert-btn btn">Discard</button>
       </div>
     </div>
   </div>

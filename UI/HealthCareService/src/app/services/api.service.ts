@@ -62,13 +62,13 @@ export class ApiService {
 
   }
 
-  // public updateDetails(userId:string, userDetails: any): Observable<any> {
-  //   // should return response from server
+  public updateDetails(userId:string, userDetails: any): Observable<any> {
+    // should return response from server
 
-  //   // handle error 
-
-  //   return;;
-  // }
+    // handle error 
+console.log(userDetails)
+    return this.http.put<any>(this.API_URL+"/Users/"+userId,userDetails).pipe(catchError(this.handleError));
+  }
 
   public registerPatient(patient: any): Observable<any> {
     // should return response from server if patientDetails added successfully

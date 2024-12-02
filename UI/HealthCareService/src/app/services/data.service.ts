@@ -211,14 +211,14 @@ export class DataService {
     return this.api.getUserDetails(this.userId).pipe(catchError(this.handleError));
   }
 
-  // updateProfile(userId:string, userDetails: any): Observable<boolean> {
+  updateProfile(userId:string, userDetails: any): Observable<boolean> {
 
-  //   // should return response retrieved from ApiService
+    // should return response retrieved from ApiService
 
-  //   // handle error 
+    // handle error 
 
-  //   return;
-  // }
+    return this.api.updateDetails(userId,userDetails).pipe(catchError(this.handleError));
+  }
 
   registerPatient(patientDetails: Patient): Observable<any> {
     // should return response retrieved from ApiService
