@@ -83,6 +83,7 @@ console.log("changeMyProfile")
           this.getProfileDetails()
         this.discardEdit()
       },
+      
       error(err) {
         console.log(err)
       },
