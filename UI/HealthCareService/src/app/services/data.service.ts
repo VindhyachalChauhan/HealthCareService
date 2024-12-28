@@ -1,97 +1,3 @@
-// import { Injectable } from '@angular/core';
-// import {HttpClient, HttpErrorResponse} from '@angular/common/http'
-// import { Patient } from '../models/patient';
-// import { BehaviorSubject, Observable, catchError, throwError } from 'rxjs';
-// import { environment } from 'src/environments/environment';
-// import { Appointment } from '../models/appointment';
-// import { LoginResponse } from '../models/loginResponse';
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class DataService {
-
-//   API_URL:String;
-//   userId!: string;
-//   isLoggedIn: false = false;
-//   isLogIn!: BehaviorSubject<boolean>;
-
-//   constructor( private http:HttpClient) {
-//     // this.API_URL='http://localhost:5253/api';
-//     this.API_URL=`${environment.apiBaseUrl}/api`;
-//     this.isLogIn=new BehaviorSubject<boolean>(false)
-
-//    }
-
-//    authenticateUser(user_name:string,password:string):Observable<any>{
-//     console.log()
-//     return this.http.post<any>(this.API_URL+"/Auth/Login",{
-//       email:user_name,
-//       password:password
-//     }).pipe(catchError(this.handleError));
-//    }
-
-//    regNewUser(regNewUser: any):Observable<any>{
-//     console.log(regNewUser)
-//     return this.http.post<any>(this.API_URL+"/Auth/Register",regNewUser).pipe(catchError(this.handleError));
-//    }
-
-//    getUserDetails(userId: any):Observable<any>{
-//     console.log(userId)
-//     return this.http.get<any>(this.API_URL+"/Users/"+userId).pipe(catchError(this.handleError));
-//    }
-
-//     registerPatient(patientDetails: Patient): Observable<void> {
-
-//     // should return response from server if patientDetails added successfully
-
-//     // handle error
-//       console.log("PatientService",patientDetails)
-//     return this.http.post<void>(this.API_URL+"/Patients/",patientDetails).pipe(catchError(this.handleError));
-//   }
-
-//   getAllPatients():Observable<Patient[]>{
-//     return this.http.get<Patient[]>(this.API_URL+"/Patients/").pipe(catchError(this.handleError));
-//   }
-
-//   getPatientById(id:string):Observable<Patient>{
-//     return this.http.get<Patient>(`${this.API_URL}/Patients/${id}`);
-//   }
-
-//   getDiseases():Observable<any>{
-//     return this.http.get<any[]>(this.API_URL+"/Appointments/diseases").pipe(catchError(this.handleError));
-//   }
-
-//   bookAppointment(appointmentDetails:any):Observable<any>{
-//     console.log(appointmentDetails)
-//     return this.http.post<any>(this.API_URL+"/Appointments",appointmentDetails).pipe(catchError(this.handleError));
-
-//   }
-
-//   scheduledAppointment():Observable<Appointment[]>{
-//     //console.log(appointmentDetails)
-//     return this.http.get<Appointment[]>(`${this.API_URL}/Appointments`).pipe(catchError(this.handleError));
-
-//   }
-
-//   getSinglePatientAppointments(id:string):Observable<Appointment[]>{
-//     return this.http.get<Appointment[]>(`${this.API_URL}/Appointments/${id}`);
-//   }
-
-//   deleteAppointment(id:string):Observable<Appointment>{
-//     return this.http.delete<Appointment>(`${this.API_URL}/Appointments/${id}`);
-//   }
-
-
-  
-//   private handleError(error:HttpErrorResponse){
-//     return throwError(error)
-//   }
-
-// }
-
-
-
-
 import { HttpErrorResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject,Observable, of, Subject, throwError } from 'rxjs';
@@ -112,6 +18,7 @@ import { UsertT } from '../models/userT.model';
 export class DataService {
 
   // $user=new BehaviorSubject<UsertT|undefined>(undefined);
+  $user=new BehaviorSubject<Users|undefined>(undefined);
 
 
 
@@ -144,6 +51,37 @@ export class DataService {
 // }
 
 
+authenticateUserT(user_email: string, password: string){
+  return this.api.checkLogin(user_email,password)
+ 
+ }
+ setUser(user:any):void{
+   this.$user.next(user)
+   this.userId=user.id
+   console.log("setUser.",this.$user)
+   localStorage.setItem('id',user.id)
+ 
+   // localStorage.setItem('user-email',user.user_email)
+   // localStorage.setItem('token',user.user_mobile)
+  }
+ user():Observable<Users|undefined>{
+   //  console.log("user...")
+   return this.$user.asObservable();
+ }
+
+
+ getUser():UsertT|undefined{
+  const id=localStorage.getItem('id')
+  if(id)
+  {
+    const user:UsertT={
+      id:id
+    };
+    return user;
+  }
+  return undefined
+ }
+
 
 
   authenticateUser(user_email: string, password: string): Observable<boolean> {
@@ -161,7 +99,7 @@ export class DataService {
           this.isLogIn=new BehaviorSubject<boolean>(false);
         }
         else{
-          // console.log(respone.id)
+          console.log("vind",respone.id)
           this.userId=respone.id
           localStorage.setItem('id',respone.id)
           localStorage.setItem('token',respone.token)
@@ -175,7 +113,7 @@ export class DataService {
     })
     // return true if user authenticated
     // return false if user not authenticated 
-    console.log(subject.asObservable())
+    // console.log(subject.asObservable())
     return subject.asObservable();
 
   }
@@ -205,7 +143,7 @@ export class DataService {
 
   getUserDetails(): Observable<any> {
     // should return user details retrieved from api service
-   this.userId!= localStorage.getItem('id')
+  //  this.userId!= localStorage.getItem('id')
    console.log("dataService..",this.userId)
 
     return this.api.getUserDetails(this.userId).pipe(catchError(this.handleError));

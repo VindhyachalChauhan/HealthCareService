@@ -13,7 +13,7 @@ import { UsertT } from 'src/app/models/userT.model';
 })
 
 export class ProfileComponent implements OnInit {
-  userDetailsT: UsertT | undefined;
+  // userDetailsT: UsertT | undefined;
 
 
   // used as a flag to display or hide form
@@ -25,8 +25,9 @@ export class ProfileComponent implements OnInit {
   mobileErrMsg = 'You must enter a valid mobile number';
   emailErrMsg = 'You must enter a valid Email ID';
   locationErrMsg = 'You must enter the location';
-  constructor(private testService: TestService,
-  //  private dataService:DataService
+  constructor(
+    // private testService: TestService,
+   private dataService:DataService
   ) {
 
   }
@@ -45,7 +46,7 @@ export class ProfileComponent implements OnInit {
 
     // get profile details and display it
     this.getProfileDetails()
-    this.userDetailsT = this.testService.getUser();
+    // this.userDetailsT = this.testService.getUser();
 
 
 
@@ -53,7 +54,8 @@ export class ProfileComponent implements OnInit {
 
   getProfileDetails() {
     // retrieve user details from service using userId
-    this.testService.getUserDetails()
+    // this.testService.getUserDetails()
+    this.dataService.getUserDetails()
       // this.dataService.user()
       .subscribe({
         next: (response) => {
@@ -62,15 +64,20 @@ export class ProfileComponent implements OnInit {
           console.log(this.editProfile)
         }
       })
+      this.editProfileForm.patchValue({
+        "userName":'',
+        "mobile":'',
+        "email":'',
+        "location":''
+      })
 
   }
-  changeMyProfileT(){
-    console.log("test")
-  }
+  
   changeMyProfile() {
 console.log("changeMyProfile")
     // if successfully changed the profile it should display new details hiding the form
-    this.testService.updateProfile(this.testService.userId,{
+    // this.testService.updateProfile(this.testService.userId,{
+      this.dataService.updateProfile(this.dataService.userId,{
       "user_name":this.editProfileForm.get('userName')?.value,
       "user_mobile":this.editProfileForm.get('mobile')?.value,
       "user_email":this.editProfileForm.get('email')?.value,

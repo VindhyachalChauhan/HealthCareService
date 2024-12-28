@@ -1,16 +1,3 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-login',
-//   templateUrl: './login.component.html',
-//   styleUrls: ['./login.component.css']
-// })
-// export class LoginComponent {
-
-// }
-
-
-
 import { Component, OnInit,  Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -31,6 +18,7 @@ import { TestService } from 'src/app/services/test.service';
 })
 export class LoginComponent implements OnInit {
 	
+	data: boolean = false;
 	isLoggedIn: boolean = false;
 	loginForm!: FormGroup;
 	isLoginFailed: boolean = false;
@@ -45,10 +33,10 @@ export class LoginComponent implements OnInit {
     emailErrMsg = 'You must enter a valid Email ID';
 
 	constructor(private route: Router,
-		//  private dataService: DataService,
+		 private dataService: DataService,
 		// private apiService:ApiService,
 		private cookieService:CookieService,
-		private testService:TestService
+		// private testService:TestService
 	) {
 	 }
 
@@ -64,81 +52,79 @@ export class LoginComponent implements OnInit {
 			password: new FormControl('')
 		});
 	}
-	doLoginT(){
-		this.testService.authenticateUserT(this.loginForm.get('email')?.value,this.loginForm.get('password')?.value).
-		subscribe({
-			next:(response)=>{
-				console.log("T..",response.id)
-				// set auth cookie
-				 this.cookieService.set('Authorization',`Bearer ${response.token}`
-          ,undefined,'/',undefined,true,'Strict');
+	// doLoginT(){
+	// 	this.testService.authenticateUserT(this.loginForm.get('email')?.value,this.loginForm.get('password')?.value).
+	// 	subscribe({
+	// 		next:(response)=>{
+	// 			console.log("T..",response.id)
+	// 			// set auth cookie
+	// 			 this.cookieService.set('Authorization',`Bearer ${response.token}`
+    //       ,undefined,'/',undefined,true,'Strict');
 
 
-		  //set user
-		  this.testService.setUser({
-			id:response.id			
-		  });
+	// 	  //set user
+	// 	  this.testService.setUser({
+	// 		id:response.id			
+	// 	  });
 
-		  this.route.navigateByUrl('/profile')
+	// 	  this.route.navigateByUrl('/profile')
 
 
-			}
-		});
-	}
+	// 		}
+	// 	});
+	// }
 
 	doLogin() {
-		// //implementting cookies login
-		// this.apiService.checkLogin(this.loginForm.get('email')?.value,this.loginForm.get('password')?.value).
-		// subscribe({
-		// 	next:(response)=>{
-		// 		// console.log(response)
-		// 		//set auth cookie
-		// 		 this.cookieService.set('Authorization',`Bearer ${response.token}`
-        //   ,undefined,'/',undefined,true,'Strict')
-
-
-		//   this.route.navigateByUrl()
-
-		// 	}
-		// })
-
+	this.dataService.authenticateUserT(this.loginForm.get('email')?.value,this.loginForm.get('password')?.value)
+	.subscribe({
+		next:(response)=>{
+			this.data=response
+			if(this.data)
+				console.log("true")
+		}
+	})
 		
 		// call authenticateUser method to perform login operation
 		// if success, redirect to profile page
 		// else display appropriate error message
 		   // reset the form
 		//    console.log("doLogin",this.loginForm.value)
-		   localStorage.clear()
-		   var data!:Boolean
+		//    localStorage.clear()
+	 
+		// 	var data;
 		//    console.log("login")
-		//  this.dataService.authenticateUser(this.loginForm.get('email')?.value,this.loginForm.get('password')?.value).
-		//    subscribe({
-		// 	next:(response)=>{
-		// 		console.log("test")
-		// 	}
-		//    })
+		//  this.dataService.authenticateUserT(this.loginForm.get('email')?.value,this.loginForm.get('password')?.value)
+		// //    subscribe({
+		// // 	next:(response)=>{
+		// // 		console.log("test")
+		// // 	}
+		// //    })
 		//    .subscribe({
 		// 	next:(response)=>{
-		// 		console.log("hi",response)
-		// 		// data=response
-		// 		// console.log(data)
+		// 		console.log("h12i",response)
+				
+		// 		data=response.id
+		// 		// console.log("12",data)
 		// 	},
 		// 	error:(error)=>{
 		// 		console.log(error);
 		// 		}
-		//    });
-		   if(data)
-		   {
-			// console.log(data)
-			this.isLoggedIn=true
-			this.route.navigate(['/profile'])
-		   }
-		   else{
-			// console.log(data)
+		// 		console.log(data)
 
-			this.isLoginFailed=true
-			this.loginForm.reset()
-		   }
+		//    });
+		//    console.log(data)
+		//    if(data)
+		//    {
+		// 	console.log("data t")
+		// 	this.isLoggedIn=true
+		// 	this.route.navigate(['/profile'])
+		//    }
+		//    else{
+		// 	console.log("data f")
+
+		// 	this.isLoginFailed=true
+		// 	this.loginForm.reset()
+		//    }
 
 	}
 
